@@ -21,7 +21,9 @@ where
 {
     // TODO: Use tokio::select! to race between future and sleep
     // Or use tokio::time::timeout
-    todo!()
+    let duration = Duration::from_millis(timeout_ms);
+    let result = tokio::time::timeout(duration, future).await;
+    result.ok()
 }
 
 /// Race two async tasks, return the result of whichever finishes first.
@@ -34,7 +36,10 @@ where
 {
     // TODO: Use tokio::select! to wait for f1 and f2
     // Return the result of whichever completes first
-    todo!()
+    tokio::select! {
+        result_f1 = f1 => result_f1,
+        result_f2 = f2 => result_f2,
+    }
 }
 
 #[cfg(test)]
